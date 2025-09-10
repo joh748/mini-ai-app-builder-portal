@@ -1,5 +1,6 @@
 // server/server.js
 import express from 'express';
+import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import requirementsRoute from './routes/requirements.js';
@@ -12,6 +13,30 @@ app.use(express.json());
 
 // Basic route
 app.get('/', (req, res) => res.send('AI App Builder API'));
+
+const mongoUri = process.env.MONGO_URI;
+if (!mongoUri) {
+  console.error('MONGO_URI missing in .env');
+  process.exit(1);
+}
+
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('✅ Connected to MongoDB'))
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
+
+mongoose.connection.on('connected', () => {
+  console.log('🔌 Mongoose connected to DB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ Mongoose connection error:', err);
+});
 
 // API routes
 app.use('/api/requirements', requirementsRoute);

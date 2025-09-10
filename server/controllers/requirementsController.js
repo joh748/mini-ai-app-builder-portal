@@ -1,4 +1,6 @@
 // server/controllers/requirementsController.js
+import Requirement from '../models/Requirement.js';
+
 export const extractRequirements = async (req, res) => {
   try {
     console.log("📥 Incoming body:", req.body);
@@ -9,7 +11,12 @@ export const extractRequirements = async (req, res) => {
       return res.status(400).json({ error: 'Description is required' });
     }
 
-    // @todo: connect to gemini API, request and get response, may need parsing the response
+    // @todo: connect to Gemini API, request and get response, may need to parse the response
+    /** 
+     * #################################################
+     * for the forms, save input fields from Gemini API? 
+     * #################################################
+     *  */ 
     const mockExtracted = {
       appName: 'Course Manager',
       entities: ['Student', 'Course', 'Grade'],
@@ -17,10 +24,19 @@ export const extractRequirements = async (req, res) => {
       features: ['Add course', 'Enrol Students', 'View reports'],
     };
 
-    // @todo: save the Gemini response to mongoDB
-    console.log("💾 Saving requirement:", mockExtracted);
+    const newReq = new Requirement({
+      description,
+      appName: mockExtracted.appName,
+      entities: mockExtracted.entities,
+      roles: mockExtracted.roles,
+      features: mockExtracted.features,
+    });
+    console.log("💾 Saving requirement:", newReq);
+    
+    await newReq.save(); // save to DB
 
-    } catch (err) {
+    res.json(newReq);
+  } catch (err) {
     console.error('❌ Error extracting requirements:', err);
     res.status(500).json({ error: 'extractRequirements Server error' });
   }
@@ -28,14 +44,8 @@ export const extractRequirements = async (req, res) => {
 
 export const listRequirements = async (req, res) => {
   try {
-    // @todo: get data from MongoDB
-    const mockListed = {
-      appName: 'Course Manager',
-      entities: ['Student', 'Course', 'Grade'],
-      roles: ['Teacher', 'Student', 'Admin'],
-      features: ['Add course', 'Enrol Students', 'View reports'],
-    };
-    res.json(mockListed);
+    const requirements = await Requirement.find();
+    res.json(requirements);
   } catch (err) {
     console.error('❌ Error listing requirements:', err);
     res.status(500).json({ error: 'listRequirements Server error' });
