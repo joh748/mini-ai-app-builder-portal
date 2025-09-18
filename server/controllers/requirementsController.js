@@ -1,5 +1,14 @@
 // server/controllers/requirementsController.js
 import Requirement from '../models/Requirement.js';
+import { GoogleGenAI, Type } from "@google/genai";
+
+/**@todo use .env file, currently process.env.GEMINI_API_KEY gives undefined */
+const genAI = new GoogleGenAI({
+  // optionally pass in API key via options or ensure env var is accessible
+  // apiKey: process.env.GEMINI_API_KEY
+  apiKey: "AIzaSyAsKhl1OwXCte2dS-6ExyNNNht9_vRtwe4",
+});
+console.log("gemini key: ", process.env.GEMINI_API_KEY);
 
 export const extractRequirements = async (req, res) => {
   try {
@@ -16,29 +25,77 @@ export const extractRequirements = async (req, res) => {
      * #################################################
      * for the forms, save input fields from Gemini API? 
      * #################################################
-     *  */ 
-    const mockExtracted = {
-      appName: 'Course Manager',
-      entities: ['Student', 'Course', 'Grade'],
-      roles: ['Teacher', 'Student', 'Admin'],
-      features: ['Add course', 'Enrol Students', 'View reports'],
-    };
+     *  */
+
+    const modelName = "gemini-2.5-flash";
+
+    const response = await genAI.models.generateContent({
+      model: modelName,
+      contents: description,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            appName: { type: Type.STRING },
+            entities: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            },
+            roles: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            },
+            features: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            }
+          },
+          required: ["appName", "entities", "roles", "features"]
+        }
+      }
+    });
+
+    const rawJson = response.text;
+
+    console.log("Gemini structured JSON:", rawJson);
+
+    let parsed;
+    try {
+      parsed = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
+    } catch (e) {
+      console.error('❌ Parsing structured JSON failed:', e);
+      return res.status(500).json({ error: 'Invalid AI structured response', raw: rawJson });
+    }
+
+    console.log("Gemini parsed JSON: ", parsed);
+
+    // const mockExtracted = {
+    //   appName: 'Course Manager',
+    //   entities: ['Student', 'Course', 'Grade'],
+    //   roles: ['Teacher', 'Student', 'Admin'],
+    //   features: ['Add course', 'Enrol Students', 'View reports'],
+    // };
+    const { appName, entities, roles, features } = parsed;
+    if (!appName || !Array.isArray(entities) || !Array.isArray(roles) || !Array.isArray(features)) {
+      return res.status(500).json({ error: 'AI output missing required fields', raw: parsed });
+    }
 
     const newReq = new Requirement({
       description,
-      appName: mockExtracted.appName,
-      entities: mockExtracted.entities,
-      roles: mockExtracted.roles,
-      features: mockExtracted.features,
+      appName: appName,
+      entities: entities,
+      roles: roles,
+      features: features,
     });
     console.log("💾 Saving requirement:", newReq);
-    
+
     await newReq.save(); // save to DB
 
-    res.json(newReq);
+    return res.status(201).json(newReq);
   } catch (err) {
     console.error('❌ Error extracting requirements:', err);
-    res.status(500).json({ error: 'extractRequirements Server error' });
+    return res.status(500).json({ error: 'extractRequirements Server error' });
   }
 };
 
