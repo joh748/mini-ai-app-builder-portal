@@ -1,0 +1,12 @@
+:root {
+  --nectar-accent-color: #ff6600;
+  --nectar-extra-color-1: #1d292e;
+  --nectar-extra-color-2: #ffffff;
+  --nectar-extra-color-3: #575757;
+}
+
+body {
+  background-color: var(--nectar-extra-color-1);
+  color: var(--nectar-extra-color-2);
+  font-family: system-ui, sans-serif;
+}
