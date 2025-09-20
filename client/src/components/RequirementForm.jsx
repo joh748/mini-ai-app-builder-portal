@@ -1,13 +1,13 @@
 import { useState } from "react";
 import '../styles/global.css';
 
-export default function RequirementForm() {
+export default function RequirementForm({ onExtracted }) {
     const [description, setDescription] = useState("");
-    const [response, setResponse] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setResponse(null);
+        setLoading(true);
 
         try {
             const res = await fetch("http://localhost:5000/api/requirements", {
@@ -16,9 +16,12 @@ export default function RequirementForm() {
                 body: JSON.stringify({ description }),
             });
             const data = await res.json();
-            setResponse(data);
+            // goes up to Home.jsx
+            onExtracted(data);
         } catch (err) {
             console.error("Error:", err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -54,47 +57,10 @@ export default function RequirementForm() {
                         color: "var(--nectar-extra-color-2)",
                     }}
                 >
-                    Extract Requirements
+                    {loading ? "Extracting..." : "Extract Requirements"}
                 </button>
             </form>
             {/* INPUT FORM ENDS */}
-
-
-            {/* RESPONSE BOX STARTS */}
-            {response && (
-                <div className="mt-6 p-4 rounded-lg"
-                    style={{ backgroundColor: "var(--nectar-extra-color-3)" }}>
-                    <h3 className="font-bold mb-2"
-                        style={{ color: "var(--nectar-accent-color)" }}>
-                        Extracted Requirements
-                    </h3>
-
-                    <p><strong>App Name:</strong> {response.appName}</p>
-
-                    <p className="mt-2 font-semibold">Entities:</p>
-                    <ul className="list-disc list-inside">
-                        {response.entities?.map((entity, i) => (
-                            <li key={i}>{entity}</li>
-                        ))}
-                    </ul>
-
-                    <p className="mt-2 font-semibold">Roles:</p>
-                    <ul className="list-disc list-inside">
-                        {response.roles?.map((role, i) => (
-                            <li key={i}>{role}</li>
-                        ))}
-                    </ul>
-
-                    <p className="mt-2 font-semibold">Features:</p>
-                    <ul className="list-disc list-inside">
-                        {response.features?.map((feature, i) => (
-                            <li key={i}>{feature}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {/* RESPONSE BOX ENDS */}
-
 
         </div>
     );

@@ -1,0 +1,19 @@
+.rolesMenu {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.roleButton {
+  background: var(--nectar-extra-color-3);
+  color: var(--nectar-extra-color-2);
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.roleButton.active {
+  background: var(--nectar-accent-color);
+  font-weight: bold;
+}

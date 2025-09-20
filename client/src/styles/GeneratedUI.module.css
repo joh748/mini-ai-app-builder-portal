@@ -1,0 +1,27 @@
+.container {
+  background-color: var(--nectar-extra-color-1-color);
+  color: var(--nectar-extra-color-2-color);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--nectar-accent-color)
+}
+
+.roles {
+  margin-bottom: 2rem;
+}
+
+.entities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}

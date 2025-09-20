@@ -1,11 +1,13 @@
 // server/server.js
+import dotenv from "dotenv";
+dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import requirementsRoute from './routes/requirements.js';
+import entitiesRoute from './routes/entities.js';
 
-import dotenv from "dotenv";
-dotenv.config();
+
 console.log("🔑 Gemini Key loaded:", process.env.GEMINI_API_KEY);
 
 const app = express();
@@ -21,6 +23,11 @@ if (!mongoUri) {
   process.exit(1);
 }
 
+/**
+ * @todo deprecation warning for useNewUrlParser and useUnifiedTopology
+ * https://jira.mongodb.org/browse/NODE-2138
+ * 
+ */
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -41,6 +48,7 @@ mongoose.connection.on('error', (err) => {
 
 // API routes
 app.use('/api/requirements', requirementsRoute);
+app.use("/api/entities", entitiesRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
