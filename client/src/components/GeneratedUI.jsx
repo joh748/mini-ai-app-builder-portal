@@ -2,64 +2,107 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import RolesMenu from "./RolesMenu";
 import EntitiesForm from "./EntitiesForm";
+import Placeholder from "./Placeholder";
 import styles from "../styles/GeneratedUI.module.css";
 
-export default function GeneratedUI({ appName, entities, roles }) {
-  const [activeRole, setActiveRole] = useState(roles[0] || "");
-  const [uiConfig, setUiConfig] = useState(
-    entities.map((entity) => ({ name: entity, fields: [] }))
-  );
-  const [editable, setEditable] = useState(true);
+const COMPONENT_MAP = {
+  RolesMenu,
+  EntitiesForm,
+  // Sidebar,
+  // SearchBar,
+  // DashboardSummary,
+  // DataTableView,
+  // ActionButton,
+  // HomepageImage,
+};
 
-  const handleUpdateEntity = (updatedEntity) => {
-    setUiConfig((prev) =>
-      prev.map((e) => (e.name === updatedEntity.name ? updatedEntity : e))
-    );
-  };
+const ORDER = [
+  "RolesMenu",
+  // "Sidebar",
+  // "SearchBar",
+  // "DashboardSummary",
+  "EntitiesForm",
+  // "DataTableView",
+  // "ActionButton",
+  // "HomepageImage",
+];
+
+export default function GeneratedUI({
+  appName,
+  uiElements,
+  editable,
+  onUpdateRoles,
+  onUpdateEntityFields,
+}) {
+
+  const [activeRole, setActiveRole] = useState(null);
+
+  const known = [];
+  const unknown = [];
+
+  uiElements.forEach((e) => {
+    if (COMPONENT_MAP[e.type]) {
+      known.push(e);
+    } else {
+      unknown.push(e);
+    }
+  });
+
+  const sortedKnown = known.sort(
+    (a, b) => ORDER.indexOf(a.type) - ORDER.indexOf(b.type)
+  );
+
+  const sortedUi = [...sortedKnown, ...unknown];
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{appName} - Generated UI</h2>
 
-      <div className={styles.toggleWrapper}>
-        <button
-          onClick={() => setEditable(!editable)}
-          className={styles.toggleButton}
-        >
-          {editable ? "Switch to Preview Mode" : "Switch to Edit Mode"}
-        </button>
-      </div>
-
       <div className={styles.generatedSection}>
+        {sortedUi.map((el, idx) => {
+          const Component = COMPONENT_MAP[el.type] || Placeholder;
 
-        <div className={styles.roles}>
-          <RolesMenu
-            roles={roles}
-            activeRole={activeRole}
-            onSelect={setActiveRole}
-          />
-        </div>
+          const extraProps =
+            el.type === "RolesMenu"
+              ? {
+                activeRole,
+                onSelect: setActiveRole,
+                onUpdate: onUpdateRoles,
+              }
+              : el.type === "EntitiesForm"
+                ? {
+                  onUpdate: onUpdateEntityFields,
+                }
+                : {};
 
-        <div className={styles.entities}>
-          {uiConfig.map((entity) => (
-            <EntitiesForm
-              key={entity.name}
-              entity={entity}
-              onUpdate={handleUpdateEntity}
+          return (
+            <Component
+              key={idx}
+              {...el.props}
+              entity={
+                el.props.forEntities ? el.props.forEntities[0] : el.props.entity
+              }
               editable={editable}
+              originalType={el.type}
+              availableTypes={Object.keys(COMPONENT_MAP)}
+              {...extraProps}
             />
-          ))}
-        </div>
+          );
+        })}
       </div>
-      {/* <pre style={{ background: "#111", color: "lime", padding: "1rem" }}>
-        {JSON.stringify(uiConfig, null, 2)}
-      </pre> */}
     </div>
   );
 }
 
 GeneratedUI.propTypes = {
   appName: PropTypes.string.isRequired,
-  entities: PropTypes.arrayOf(PropTypes.string).isRequired,
-  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  uiElements: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      props: PropTypes.object,
+    })
+  ).isRequired,
+  editable: PropTypes.bool,
+  onUpdateRoles: PropTypes.func,
+  onUpdateEntityFields: PropTypes.func,
 };

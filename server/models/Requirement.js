@@ -5,7 +5,19 @@ const RequirementSchema = new mongoose.Schema({
   appName: { type: String },
   entities: [{ type: String }],
   roles: [{ type: String }],
-  features: [{ type: String }]
+  features: [{ type: String }],
+  uiElements: [
+      {
+        type: {
+          type: String,
+          required: true,
+        },
+        props: {
+          type: mongoose.Schema.Types.Mixed,
+          default: {},
+        },
+      },
+    ],
 }, { timestamps: true });
 
 export default mongoose.model('Requirement', RequirementSchema);

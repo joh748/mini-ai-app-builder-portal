@@ -11,46 +11,50 @@ export default function EntitiesForm({ entity, onUpdate, editable }) {
         const res = await fetch("http://localhost:5000/api/entities/fields", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ entity: entity.name }),
+          body: JSON.stringify({ entity }),
         });
         const data = await res.json();
-        setFields(data.fields || []);
+        const normalized = (data.fields || []).map((f) => ({
+        ...f,
+        type: f.type === "string" ? "text" : f.type,
+      }));
+      setFields(normalized);
       } catch (err) {
-        console.error("❌ Error fetching fields for", entity.name, err);
+        console.error("❌ Error fetching fields for", entity, err);
       }
     }
-    fetchFields();
-  }, [entity.name]);
+    if (entity) fetchFields();
+  }, [entity]);
 
   const updateFieldName = (index, name) => {
     const updated = [...fields];
     updated[index].name = name;
     setFields(updated);
-    onUpdate({ name: entity.name, fields: updated });
+    onUpdate({name: entity, fields: updated});
   };
 
   const updateFieldType = (index, type) => {
     const updated = [...fields];
     updated[index].type = type;
     setFields(updated);
-    onUpdate({ name: entity.name, fields: updated });
+    onUpdate({name: entity, fields: updated});
   };
 
   const removeField = (index) => {
     const updated = fields.filter((_, i) => i !== index);
     setFields(updated);
-    onUpdate({ name: entity.name, fields: updated });
+    onUpdate({name: entity, fields: updated});
   };
 
   const addField = () => {
     const updated = [...fields, { name: "NewField", type: "text" }];
     setFields(updated);
-    onUpdate({ name: entity.name, fields: updated });
+    onUpdate({name: entity, fields: updated});
   };
 
   return (
     <div className={styles.entityForm}>
-      <h3>{entity.name} Form</h3>
+      <h3>{entity} Form</h3>
 
       {fields.length > 0 ? (
         <form>
@@ -74,7 +78,11 @@ export default function EntitiesForm({ entity, onUpdate, editable }) {
                     <option value="email">Email</option>
                     <option value="date">Date</option>
                   </select>
-                  <button type="button" onClick={() => removeField(i)} className={styles.deleteBtn}>
+                  <button
+                    type="button"
+                    onClick={() => removeField(i)}
+                    className={styles.deleteBtn}
+                  >
                     ❌
                   </button>
                 </>
@@ -88,14 +96,18 @@ export default function EntitiesForm({ entity, onUpdate, editable }) {
           ))}
 
           {editable && (
-            <button type="button" onClick={addField} className={styles.submitBtn}>
+            <button
+              type="button"
+              onClick={addField}
+              className={styles.submitBtn}
+            >
               ✚ Add Field
             </button>
           )}
 
           {!editable && (
             <button type="submit" className={styles.submitBtn} disabled>
-              Submit {entity.name}
+              Submit {entity}
             </button>
           )}
         </form>
@@ -107,15 +119,7 @@ export default function EntitiesForm({ entity, onUpdate, editable }) {
 }
 
 EntitiesForm.propTypes = {
-  entity: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    fields: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        type: PropTypes.string,
-      })
-    ),
-  }).isRequired,
+  entity: PropTypes.string.isRequired,
   onUpdate: PropTypes.func.isRequired,
   editable: PropTypes.bool.isRequired,
 };
