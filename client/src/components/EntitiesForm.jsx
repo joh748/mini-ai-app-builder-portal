@@ -1,55 +1,38 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "../styles/EntitiesForm.module.css";
 
-export default function EntitiesForm({ entity, onUpdate, editable }) {
-  const [fields, setFields] = useState([]);
-
+export default function EntitiesForm({ entity, initialFields, onUpdate, editable }) {
+  const [fields, setFields] = useState(initialFields || []);
+console.log("Inside EntitiesForm, got these initial fields: \n", initialFields);
   useEffect(() => {
-    async function fetchFields() {
-      try {
-        const res = await fetch("http://localhost:5000/api/entities/fields", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ entity }),
-        });
-        const data = await res.json();
-        const normalized = (data.fields || []).map((f) => ({
-        ...f,
-        type: f.type === "string" ? "text" : f.type,
-      }));
-      setFields(normalized);
-      } catch (err) {
-        console.error("❌ Error fetching fields for", entity, err);
-      }
-    }
-    if (entity) fetchFields();
-  }, [entity]);
+    setFields(initialFields || []);
+  }, [initialFields]);
 
   const updateFieldName = (index, name) => {
     const updated = [...fields];
     updated[index].name = name;
     setFields(updated);
-    onUpdate({name: entity, fields: updated});
+    onUpdate({ name: entity, fields: updated });
   };
 
   const updateFieldType = (index, type) => {
     const updated = [...fields];
     updated[index].type = type;
     setFields(updated);
-    onUpdate({name: entity, fields: updated});
+    onUpdate({ name: entity, fields: updated });
   };
 
   const removeField = (index) => {
     const updated = fields.filter((_, i) => i !== index);
     setFields(updated);
-    onUpdate({name: entity, fields: updated});
+    onUpdate({ name: entity, fields: updated });
   };
 
   const addField = () => {
     const updated = [...fields, { name: "NewField", type: "text" }];
     setFields(updated);
-    onUpdate({name: entity, fields: updated});
+    onUpdate({ name: entity, fields: updated });
   };
 
   return (
@@ -112,7 +95,7 @@ export default function EntitiesForm({ entity, onUpdate, editable }) {
           )}
         </form>
       ) : (
-        <p>Loading fields...</p>
+        <p>No fields available</p>
       )}
     </div>
   );
@@ -120,6 +103,7 @@ export default function EntitiesForm({ entity, onUpdate, editable }) {
 
 EntitiesForm.propTypes = {
   entity: PropTypes.string.isRequired,
+  initialFields: PropTypes.array,
   onUpdate: PropTypes.func.isRequired,
   editable: PropTypes.bool.isRequired,
 };

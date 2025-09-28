@@ -15,8 +15,37 @@ export default function RequirementForm({ onExtracted }) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ description }),
             });
-            const data = await res.json();
-            // goes up to Home.jsx
+            let data = await res.json();
+
+            if (data.entities && data.entities.length > 0) {
+                const entitiesWithFields = await Promise.all(
+                    data.entities.map(async (entity) => {
+                        const entityName = typeof entity === "string" ? entity : entity.name;
+
+                        try {
+                            const fieldRes = await fetch("http://localhost:5000/api/entities/fields", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ entity: entityName }),
+                            });
+                            const fieldData = await fieldRes.json();
+                            const normalized = (fieldData.fields || []).map((f) => ({
+                                ...f,
+                                type: f.type === "string" ? "text" : f.type,
+                            }));
+
+                            return { name: entityName, fields: normalized };
+                        } catch (err) {
+                            console.error("❌ Error fetching fields for", entityName, err);
+                            return { name: entityName, fields: [] };
+                        }
+                    })
+                );
+
+                data = { ...data, entities: entitiesWithFields };
+            }
+
+            console.log("Inside RequirementForm.jsx, data after fetch: \n", data.entities);
             onExtracted(data);
         } catch (err) {
             console.error("Error:", err);
@@ -28,13 +57,11 @@ export default function RequirementForm({ onExtracted }) {
     return (
         <div className="max-w-2xl w-full p-6 rounded-2xl shadow-lg"
             style={{ backgroundColor: `var(--nectar-extra-color-1)` }}>
-
             <h2 className="text-2xl font-bold mb-4"
                 style={{ color: "var(--nectar-accent-color)" }}>
                 App Requirement Extractor
             </h2>
 
-            {/* INPUT FORM STARTS */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <textarea
                     value={description}
@@ -60,8 +87,6 @@ export default function RequirementForm({ onExtracted }) {
                     {loading ? "Extracting..." : "Extract Requirements"}
                 </button>
             </form>
-            {/* INPUT FORM ENDS */}
-
         </div>
     );
 }

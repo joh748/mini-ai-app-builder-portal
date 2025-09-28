@@ -20,7 +20,7 @@ export default function RequirementsSummary({ requirements }) {
       <p className="mt-2 font-semibold">Entities:</p>
       <ul className="list-disc list-inside">
         {requirements.entities?.map((entity, i) => (
-          <li key={i}>{entity}</li>
+          <li key={i}>{entity.name}</li>
         ))}
       </ul>
 

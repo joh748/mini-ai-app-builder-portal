@@ -32,6 +32,7 @@ export default function Home() {
     });
   };
 
+  console.log("Inside Home.jsx, here is the requirements: ", requirements);
   return (
     <div className="min-h-screen bg-gray-950 text-white flex-col items-center justify-center">
       

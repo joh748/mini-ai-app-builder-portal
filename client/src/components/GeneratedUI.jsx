@@ -45,6 +45,7 @@ const ORDER = [
 export default function GeneratedUI({
   appName,
   uiElements,
+  entities,
   editable,
   onUpdateRoles,
   onUpdateEntityFields,
@@ -86,7 +87,9 @@ export default function GeneratedUI({
   );
 
   const sortedUi = [...sortedKnown, ...unknown];
-  const [elements, setElements] = useState(uiElements);
+  const [elements, setElements] = useState(sortedUi);
+
+  console.log("Inside GeneratedUI.jsx, here is elements: \n", elements);
 
   return (
     <div className={styles.container}>
@@ -110,18 +113,22 @@ export default function GeneratedUI({
                 el.type === "RolesMenu"
                   ? { activeRole, onSelect: setActiveRole, onUpdate: onUpdateRoles }
                   : el.type === "EntitiesForm"
-                  ? { onUpdate: onUpdateEntityFields }
-                  : {};
+                    ? { onUpdate: onUpdateEntityFields }
+                    : {};
+
+              const entityName = el.props.forEntities
+                ? el.props.forEntities[0]
+                : el.props.entity;
+
+              const matchedEntity = entities?.find((e) => e.name === entityName);
 
               return (
                 <SortableItem key={idx} id={idx}>
-
                   <Component
                     key={idx}
                     {...el.props}
-                    entity={
-                      el.props.forEntities ? el.props.forEntities[0] : el.props.entity
-                    }
+                    entity={el.props.forEntities ? el.props.forEntities[0] : el.props.entity}
+                    initialFields={matchedEntity?.fields || []}
                     editable={editable}
                     originalType={el.type}
                     availableTypes={Object.keys(COMPONENT_MAP)}
