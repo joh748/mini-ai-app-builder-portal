@@ -3,6 +3,21 @@ import PropTypes from "prop-types";
 import RolesMenu from "./RolesMenu";
 import EntitiesForm from "./EntitiesForm";
 import Placeholder from "./Placeholder";
+import SortableItem from "./SortableItem";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import styles from "../styles/GeneratedUI.module.css";
 
 const COMPONENT_MAP = {
@@ -36,6 +51,24 @@ export default function GeneratedUI({
 }) {
 
   const [activeRole, setActiveRole] = useState(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = elements.findIndex((_, i) => i === active.id);
+    const newIndex = elements.findIndex((_, i) => i === over.id);
+
+    if (oldIndex !== -1 && newIndex !== -1) {
+      setElements((items) => arrayMove(items, oldIndex, newIndex));
+    }
+  };
 
   const known = [];
   const unknown = [];
@@ -53,42 +86,53 @@ export default function GeneratedUI({
   );
 
   const sortedUi = [...sortedKnown, ...unknown];
+  const [elements, setElements] = useState(uiElements);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{appName} - Generated UI</h2>
 
       <div className={styles.generatedSection}>
-        {sortedUi.map((el, idx) => {
-          const Component = COMPONENT_MAP[el.type] || Placeholder;
 
-          const extraProps =
-            el.type === "RolesMenu"
-              ? {
-                activeRole,
-                onSelect: setActiveRole,
-                onUpdate: onUpdateRoles,
-              }
-              : el.type === "EntitiesForm"
-                ? {
-                  onUpdate: onUpdateEntityFields,
-                }
-                : {};
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={elements.map((_, idx) => idx)}
+            strategy={verticalListSortingStrategy}
+          >
+            {elements.map((el, idx) => {
+              const Component = COMPONENT_MAP[el.type] || Placeholder;
 
-          return (
-            <Component
-              key={idx}
-              {...el.props}
-              entity={
-                el.props.forEntities ? el.props.forEntities[0] : el.props.entity
-              }
-              editable={editable}
-              originalType={el.type}
-              availableTypes={Object.keys(COMPONENT_MAP)}
-              {...extraProps}
-            />
-          );
-        })}
+              const extraProps =
+                el.type === "RolesMenu"
+                  ? { activeRole, onSelect: setActiveRole, onUpdate: onUpdateRoles }
+                  : el.type === "EntitiesForm"
+                  ? { onUpdate: onUpdateEntityFields }
+                  : {};
+
+              return (
+                <SortableItem key={idx} id={idx}>
+
+                  <Component
+                    key={idx}
+                    {...el.props}
+                    entity={
+                      el.props.forEntities ? el.props.forEntities[0] : el.props.entity
+                    }
+                    editable={editable}
+                    originalType={el.type}
+                    availableTypes={Object.keys(COMPONENT_MAP)}
+                    {...extraProps}
+                  />
+                </SortableItem>
+              );
+            })}
+          </SortableContext>
+        </DndContext>
+
       </div>
     </div>
   );
