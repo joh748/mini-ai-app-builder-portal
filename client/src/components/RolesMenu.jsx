@@ -1,40 +1,25 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "../styles/RolesMenu.module.css";
 
 export default function RolesMenu({ roles, activeRole, onSelect, editable, onUpdate }) {
-  const [localRoles, setLocalRoles] = useState(roles);
-
-  // pick first role if none selected
-  const [localActive, setLocalActive] = useState(activeRole || roles[0]);
-
-  useEffect(() => {
-    if (activeRole) {
-      setLocalActive(activeRole);
-    }
-  }, [activeRole]);
 
   const handleSelect = (role) => {
-    setLocalActive(role);
     if (onSelect) onSelect(role);
   };
 
   const updateRole = (index, value) => {
-    const updated = [...localRoles];
+    const updated = [...roles];
     updated[index] = value;
-    setLocalRoles(updated);
     onUpdate && onUpdate(updated);
   };
 
   const addRole = () => {
-    const updated = [...localRoles, "NewRole"];
-    setLocalRoles(updated);
+    const updated = [...roles, "NewRole"];
     onUpdate && onUpdate(updated);
   };
 
   const removeRole = (index) => {
-    const updated = localRoles.filter((_, i) => i !== index);
-    setLocalRoles(updated);
+    const updated = roles.filter((_, i) => i !== index);
     onUpdate && onUpdate(updated);
   };
 
@@ -42,7 +27,7 @@ export default function RolesMenu({ roles, activeRole, onSelect, editable, onUpd
     <div className={styles.rolesMenu}>
       {editable ? (
         <div className={styles.editContainer}>
-          {localRoles.map((role, i) => (
+          {roles.map((role, i) => (
             <div key={i} className={styles.roleEditRow}>
               <input
                 type="text"
@@ -64,11 +49,11 @@ export default function RolesMenu({ roles, activeRole, onSelect, editable, onUpd
           </button>
         </div>
       ) : (
-        localRoles.map((role) => (
+        roles.map((role) => (
           <button
             key={role}
             className={`${styles.roleButton} ${
-              (activeRole || localActive) === role ? styles.active : ""
+              activeRole === role ? styles.active : ""
             }`}
             onClick={() => handleSelect(role)}
           >

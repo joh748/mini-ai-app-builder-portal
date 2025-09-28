@@ -46,6 +46,7 @@ export default function GeneratedUI({
   appName,
   uiElements,
   entities,
+  roles,
   editable,
   onUpdateRoles,
   onUpdateEntityFields,
@@ -111,7 +112,7 @@ export default function GeneratedUI({
 
               const extraProps =
                 el.type === "RolesMenu"
-                  ? { activeRole, onSelect: setActiveRole, onUpdate: onUpdateRoles }
+                  ? { roles, activeRole, onSelect: setActiveRole, onUpdate: onUpdateRoles }
                   : el.type === "EntitiesForm"
                     ? { onUpdate: onUpdateEntityFields }
                     : {};
