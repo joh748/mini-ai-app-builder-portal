@@ -5,8 +5,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import requirementsRoute from './routes/requirements.js';
+import chatsRoutes from "./routes/chats.js";
 import entitiesRoute from './routes/entities.js';
-
 
 console.log("🔑 Gemini Key loaded:", process.env.GEMINI_API_KEY);
 
@@ -48,6 +48,7 @@ mongoose.connection.on('error', (err) => {
 
 // API routes
 app.use('/api/requirements', requirementsRoute);
+app.use("/api/chat", chatsRoutes);
 // app.use("/api/entities", entitiesRoute);
 
 const PORT = process.env.PORT || 5000;
