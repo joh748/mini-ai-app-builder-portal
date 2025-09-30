@@ -1,4 +1,6 @@
-// server/controllers/entitiesController.js
+/**
+ * THIS FILE IS NOT USED
+ */
 import { GoogleGenAI, Type } from "@google/genai";
 
 const genAI = new GoogleGenAI({
