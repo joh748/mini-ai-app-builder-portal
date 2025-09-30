@@ -19,7 +19,7 @@ export const extractRequirements = async (req, res) => {
       return res.status(400).json({ error: "Description is required" });
     }
 
-    const modelName = "gemini-2.5-flash";
+    const modelName = "gemini-2.5-flash-lite";
 
 const response = await genAI.models.generateContent({
   model: modelName,
@@ -51,7 +51,24 @@ Return ONLY valid JSON, no explanations.
         appName: { type: Type.STRING },
         entities: {
           type: Type.ARRAY,
-          items: { type: Type.STRING },
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              name: { type: Type.STRING },
+              fields: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    name: { type: Type.STRING },
+                    type: { type: Type.STRING },
+                  },
+                  required: ["name", "type"],
+                },
+              },
+            },
+            required: ["name", "fields"],
+          },
         },
         roles: {
           type: Type.ARRAY,

@@ -13,7 +13,7 @@ export const getEntityFields = async (req, res) => {
             return res.status(400).json({ error: "Entity name is required" });
         }
 
-        const modelName = "gemini-2.5-flash";
+        const modelName = "gemini-2.5-flash-lite";
 
         const response = await genAI.models.generateContent({
             model: modelName,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import RolesMenu from "./RolesMenu";
 import EntitiesForm from "./EntitiesForm";
@@ -33,13 +33,7 @@ const COMPONENT_MAP = {
 
 const ORDER = [
   "RolesMenu",
-  // "Sidebar",
-  // "SearchBar",
-  // "DashboardSummary",
   "EntitiesForm",
-  // "DataTableView",
-  // "ActionButton",
-  // "HomepageImage",
 ];
 
 export default function GeneratedUI({
@@ -51,95 +45,89 @@ export default function GeneratedUI({
   onUpdateRoles,
   onUpdateEntityFields,
 }) {
-
   const [activeRole, setActiveRole] = useState(null);
+
   const sensors = useSensors(
-      useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 10,
-      },
-    }),    
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 10 },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-      activationConstraint: {
-        distance: 5,
-      },
+      activationConstraint: { distance: 5 },
     })
   );
+
+  // Pre-expand EntitiesForm into one item per entity
+  const expandedUiElements = useMemo(() => {
+    return uiElements.flatMap((el) => {
+      if (el.type === "EntitiesForm") {
+        return entities.map((entity) => ({
+          type: "EntitiesForm",
+          props: { entityName: entity.name, fields: entity.fields },
+        }));
+      }
+      return [el];
+    });
+  }, [uiElements, entities]);
+
+  const [elements, setElements] = useState(expandedUiElements);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    const oldIndex = elements.findIndex((_, i) => i === active.id);
-    const newIndex = elements.findIndex((_, i) => i === over.id);
+    const oldIndex = elements.findIndex((_, idx) => `${idx}` === active.id);
+    const newIndex = elements.findIndex((_, idx) => `${idx}` === over.id);
 
     if (oldIndex !== -1 && newIndex !== -1) {
       setElements((items) => arrayMove(items, oldIndex, newIndex));
     }
   };
 
-  const known = [];
-  const unknown = [];
-
-  uiElements.forEach((e) => {
-    if (COMPONENT_MAP[e.type]) {
-      known.push(e);
-    } else {
-      unknown.push(e);
-    }
-  });
-
-  const sortedKnown = known.sort(
-    (a, b) => ORDER.indexOf(a.type) - ORDER.indexOf(b.type)
-  );
-
-  const sortedUi = [...sortedKnown, ...unknown];
-  const [elements, setElements] = useState(sortedUi);
-
-  console.log("Inside GeneratedUI.jsx, here is elements: \n", elements);
+  console.log("Inside GeneratedUI.jsx, here is elements (persisted):", elements);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{appName} - Generated UI</h2>
 
       <div className={styles.generatedSection}>
-
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={elements.map((_, idx) => idx)}
+            items={elements.map((_, idx) => `${idx}`)}
             strategy={verticalListSortingStrategy}
           >
             {elements.map((el, idx) => {
               const Component = COMPONENT_MAP[el.type] || Placeholder;
 
+              if (el.type === "EntitiesForm") {
+                return (
+                  <SortableItem key={idx} id={`${idx}`}>
+                    <EntitiesForm
+                      entity={el.props.entityName}
+                      initialFields={el.props.fields}
+                      editable={editable}
+                      onUpdate={onUpdateEntityFields}
+                      originalType={el.type}
+                      availableTypes={Object.keys(COMPONENT_MAP)}
+                    />
+                  </SortableItem>
+                );
+              }
+
               const extraProps =
                 el.type === "RolesMenu"
                   ? { roles, activeRole, onSelect: setActiveRole, onUpdate: onUpdateRoles }
-                  : el.type === "EntitiesForm"
-                    ? { onUpdate: onUpdateEntityFields }
-                    : {};
-
-              const entityName = el.props.forEntities
-                ? el.props.forEntities[0]
-                : el.props.entity;
-
-              const matchedEntity = entities?.find((e) => e.name === entityName);
+                  : {};
 
               return (
-                <SortableItem key={idx} id={idx}>
+                <SortableItem key={idx} id={`${idx}`}>
                   <Component
-                    key={idx}
                     {...el.props}
-                    entity={el.props.forEntities ? el.props.forEntities[0] : el.props.entity}
-                    initialFields={matchedEntity?.fields || []}
                     editable={editable}
-                    originalType={el.type}
-                    availableTypes={Object.keys(COMPONENT_MAP)}
                     {...extraProps}
                   />
                 </SortableItem>
@@ -147,7 +135,6 @@ export default function GeneratedUI({
             })}
           </SortableContext>
         </DndContext>
-
       </div>
     </div>
   );
@@ -161,6 +148,18 @@ GeneratedUI.propTypes = {
       props: PropTypes.object,
     })
   ).isRequired,
+  entities: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      fields: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          type: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+    })
+  ).isRequired,
+  roles: PropTypes.array,
   editable: PropTypes.bool,
   onUpdateRoles: PropTypes.func,
   onUpdateEntityFields: PropTypes.func,

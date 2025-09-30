@@ -11,41 +11,12 @@ export default function RequirementForm({ onExtracted }) {
 
         try {
             const res = await fetch("http://localhost:5000/api/requirements", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ description }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description }),
             });
-            let data = await res.json();
-
-            if (data.entities && data.entities.length > 0) {
-                const entitiesWithFields = await Promise.all(
-                    data.entities.map(async (entity) => {
-                        const entityName = typeof entity === "string" ? entity : entity.name;
-
-                        try {
-                            const fieldRes = await fetch("http://localhost:5000/api/entities/fields", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ entity: entityName }),
-                            });
-                            const fieldData = await fieldRes.json();
-                            const normalized = (fieldData.fields || []).map((f) => ({
-                                ...f,
-                                type: f.type === "string" ? "text" : f.type,
-                            }));
-
-                            return { name: entityName, fields: normalized };
-                        } catch (err) {
-                            console.error("❌ Error fetching fields for", entityName, err);
-                            return { name: entityName, fields: [] };
-                        }
-                    })
-                );
-
-                data = { ...data, entities: entitiesWithFields };
-            }
-
-            console.log("Inside RequirementForm.jsx, data after fetch: \n", data.entities);
+            const data = await res.json();
+            console.log("Inside RequirementForm.jsx, data after fetch:", data.entities);
             onExtracted(data);
         } catch (err) {
             console.error("Error:", err);
