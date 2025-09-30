@@ -30,7 +30,7 @@ Based on this app description:
 
 Extract the following as a single JSON object:
 - appName: a short name for the app
-- entities: list of main data entities (as strings)
+- entities: list of main data entities
 - roles: list of user roles (as strings)
 - features: list of app features (as strings)
 - uiElements: a list of UI components with appropriate props

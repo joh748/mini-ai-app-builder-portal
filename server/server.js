@@ -46,7 +46,9 @@ mongoose.connection.on('error', (err) => {
   console.error('❌ Mongoose connection error:', err);
 });
 
-// API routes
+/**
+ *  API ROUTES
+ */
 app.use('/api/requirements', requirementsRoute);
 app.use("/api/chat", chatsRoutes);
 // app.use("/api/entities", entitiesRoute);
