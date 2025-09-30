@@ -7,7 +7,7 @@ import GeneratedUI from "../components/GeneratedUI";
 export default function Home() {
 
   const [requirements, setRequirements] = useState(null);
-  const [editable, setEditable] = useState(true);
+  const [editable, setEditable] = useState(false);
 
   const handleExtracted = (data) => {
       setRequirements(data);

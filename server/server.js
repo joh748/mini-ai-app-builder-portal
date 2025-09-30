@@ -48,7 +48,7 @@ mongoose.connection.on('error', (err) => {
 
 // API routes
 app.use('/api/requirements', requirementsRoute);
-app.use("/api/entities", entitiesRoute);
+// app.use("/api/entities", entitiesRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
