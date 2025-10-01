@@ -43,8 +43,6 @@ This project uses **[@dnd-kit](https://docs.dndkit.com/)** for drag-and-drop fun
 ### Default Layout (Auto-Sorted)
 
 ![extracted requirements screenshot](./docs/screenshots/requirements.png)
-![chat layout screenshot](./docs/screenshots/chat.png)
-
 
 ### Example GIF Demo
 ![Example Usage GIF demo](./docs/screenshots/basic_layout.gif)
