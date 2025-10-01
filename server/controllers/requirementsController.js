@@ -4,9 +4,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
-    // || "AIzaSyAsKhl1OwXCte2dS-6ExyNNNht9_vRtwe4", // fallback
 });
-// console.log("gemini key: ", process.env.GEMINI_API_KEY);
 
 export const extractRequirements = async (req, res) => {
   try {

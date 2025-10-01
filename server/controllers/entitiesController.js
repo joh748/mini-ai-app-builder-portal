@@ -4,8 +4,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 const genAI = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY 
-    || "AIzaSyAsKhl1OwXCte2dS-6ExyNNNht9_vRtwe4",
+    apiKey: process.env.GEMINI_API_KEY,
 });
 
 export const getEntityFields = async (req, res) => {

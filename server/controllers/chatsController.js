@@ -3,9 +3,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
-    // || "AIzaSyAsKhl1OwXCte2dS-6ExyNNNht9_vRtwe4", // fallback
 });
-// console.log("gemini key in chatsController: ", process.env.GEMINI_API_KEY);
 
 export const handleChat = async (req, res) => {
   try {

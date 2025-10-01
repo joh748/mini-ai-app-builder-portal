@@ -1,4 +1,6 @@
-// server/routes/entities.js
+/**
+ * this route is not used
+ */
 import express from "express";
 import { getEntityFields } from "../controllers/entitiesController.js";
 
