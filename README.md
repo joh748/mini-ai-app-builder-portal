@@ -1,9 +1,4 @@
-# Generated UI Builder
-
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge\&logo=react\&logoColor=61DAFB)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge\&logo=javascript\&logoColor=white)
-![dnd-kit](https://img.shields.io/badge/dnd--kit-Drag%20%26%20Drop-blueviolet?style=for-the-badge)
-![CSS Modules](https://img.shields.io/badge/CSS%20Modules-000000?style=for-the-badge\&logo=css3\&logoColor=1572B6)
+# AI assisted UI Builder
 
 A dynamic React component that generates, orders, and manages UI elements (e.g., forms, menus) with drag-and-drop support.
 
@@ -11,11 +6,33 @@ This project uses **[@dnd-kit](https://docs.dndkit.com/)** for drag-and-drop fun
 
 ---
 
+## 🛠️ Tech Stack
+
+### Frontend
+![React](https://img.shields.io/badge/React-19.1.1-61DAFB?logo=react&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.17-38B2AC?logo=tailwind-css&logoColor=white)
+![DnD Kit](https://img.shields.io/badge/DnD%20Kit-10.0.0-000000?logo=react&logoColor=white)
+
+
+### Backend
+![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5.1.0-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
+![Google GenAI](https://img.shields.io/badge/Google%20GenAI-1.21.0-4285F4?logo=google&logoColor=white)
+
+
+### Tooling
+![Nodemon](https://img.shields.io/badge/Nodemon-3.1.10-76D04B?logo=nodemon&logoColor=white)
+
+
+
+---
+
 ## ✨ Features
 
 * **Dynamic UI generation**: Components are rendered based on configuration (`uiElements`).
 * **Custom ordering**: UI elements are sorted according to a predefined `ORDER` list. Unknown components are appended at the end.
-* **Drag & drop**: Reorder components interactively using mouse or keyboard.
+* **Drag & drop**: Reorder components interactively using mouse.
 * **Entity expansion**: Automatically expands `EntitiesForm` for all provided entities.
 * **Extensible**: Easily add new components to the `COMPONENT_MAP`.
 
@@ -25,28 +42,53 @@ This project uses **[@dnd-kit](https://docs.dndkit.com/)** for drag-and-drop fun
 
 ### Default Layout (Auto-Sorted)
 
-![extractor layout screenshot](./docs/screenshots/extractor.png)
 ![extracted requirements screenshot](./docs/screenshots/requirements.png)
 ![chat layout screenshot](./docs/screenshots/chat.png)
 
 
 ### Example GIF Demo
-![Basic Layout GIF demo](./docs/screenshots/basic_layout.gif)
-![Dragging GIF demo](./docs/screenshots/drag.gif)
-![Chatting GIF demo](./docs/screenshots/chat.png)
-![ColorPick GIF demo](./docs/screenshots/colorpick.gif)
+![Example Usage GIF demo](./docs/screenshots/basic_layout.gif)
 
 ---
 
 ## 📦 Installation
 
-```bash
-# Clone repository
-git clone <your-repo-url>
+Clone the repo and install dependencies for both **client** and **server**.
 
-# Install dependencies
-npm install
+```bash
+git clone <your-repo-url>
+cd <your-project-root>
 ```
+
+### 🔹 Client Setup (React Frontend)
+
+```bash
+cd src/client
+npm install
+npm start
+```
+
+* Runs the client at [http://localhost:3000](http://localhost:3000).
+* React app with drag-and-drop UI builder.
+
+### 🔹 Server Setup (Express Backend)
+
+```bash
+cd src/server
+npm install
+dotenvx run -- npm run dev
+```
+
+* Runs the backend at [http://localhost:5000](http://localhost:5000).
+* Uses **dotenvx** to load environment variables.
+
+---
+
+## 🛠 Development Workflow
+
+* Run **client and server in parallel** (in two terminals).
+* Client proxies requests to the server (configure in `src/client/package.json` if needed).
+* Update `.env` files for API keys, database URLs, etc.
 
 ---
 
@@ -109,16 +151,6 @@ const ORDER = [
 
 ---
 
-## 🛠 Development
-
-```bash
-npm run dev
-```
-
-Runs the project locally. Open [http://localhost:3000](http://localhost:3000).
-
----
-
 ## 📜 License
 
 MIT License. Free to use and modify.
@@ -145,7 +177,7 @@ MIT License. Free to use and modify.
 
 * **Community-driven UI Marketplace**
 
-  * Build a marketplace where developers/designers can **upload custom UI elements**.
+  * Build a marketplace where creaters can **upload custom UI elements**.
   * When Gemini API suggests a component, recommend relevant UI elements from the community.
   * Allow remixing and sharing of UI elements across projects.
 
@@ -158,6 +190,27 @@ MIT License. Free to use and modify.
 
   * Theme editor with color palettes and typography settings.
   * Support for different fidelity levels: **wireframe → prototype → polished UI**.
+
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── client/               # React frontend
+│   ├── App.jsx           # Root React component
+│   ├── components/       # Reusable UI components
+│   ├── pages/            # Page-level views
+│   ├── styles/           # CSS modules & global styles
+│
+└── server/               # Express backend
+    ├── server.js         # Entry point for backend
+    ├── controllers/      # Route handler logic
+    ├── models/           # Database schemas
+    ├── routes/           # API route definitions
+```
+
 
 ---
 
