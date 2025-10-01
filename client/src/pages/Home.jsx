@@ -47,11 +47,11 @@ export default function Home() {
         <RequirementsSummary requirements={requirements} />
       </div>
 
-      {/* {requirements &&  */}
+      {requirements && 
       <DndContext>
         <ColorSidebar />
       </DndContext>
-      {/*} */}
+      }
 
 
       {requirements && (
