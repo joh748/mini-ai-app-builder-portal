@@ -26,10 +26,6 @@
   background-color: var(--black-secondary-color-1);
 }
 
-.minimizeButton:hover {
-  background-color: var(--dark-blue-primary-color-1);
-}
-
 .dragHandle {
   font-weight: bold;
   font-size: 0.95rem;
