@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import RolesMenu from "./RolesMenu";
 import EntitiesForm from "./EntitiesForm";
@@ -57,7 +57,7 @@ export default function GeneratedUI({
     })
   );
 
-  // Pre-expand EntitiesForm into one item per entity
+  // flatMap used for dragging EntitiesForm separately
   const expandedUiElements = useMemo(() => {
     return uiElements.flatMap((el) => {
       if (el.type === "EntitiesForm") {
@@ -71,6 +71,10 @@ export default function GeneratedUI({
   }, [uiElements, entities]);
 
   const [elements, setElements] = useState(expandedUiElements);
+  
+  useEffect(() => {
+    setElements(expandedUiElements);
+  }, [expandedUiElements]);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;

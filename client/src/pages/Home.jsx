@@ -1,8 +1,9 @@
 import { useState } from "react";
 
 import RequirementForm from "../components/RequirementForm";
-import RequirementsSummary from "../RequirementSummary";
+import RequirementsSummary from "../components/RequirementSummary";
 import GeneratedUI from "../components/GeneratedUI";
+import ChatUI from "../components/ChatUI";
 
 export default function Home() {
 
@@ -60,6 +61,11 @@ export default function Home() {
             editable={editable}
             onUpdateRoles={handleUpdateRoles}
             onUpdateEntityFields={handleUpdateEntityFields}
+          />
+
+          <ChatUI
+            requirement={requirements}
+            onUpdated={(updated) => setRequirements(updated)}
           />
         </div>
       )}
