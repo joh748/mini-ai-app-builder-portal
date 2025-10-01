@@ -3,12 +3,12 @@ export default function RequirementsSummary({ requirements }) {
 
   return (
     <div
-      className="mt-6 p-4 rounded-lg"
-      style={{ backgroundColor: "var(--nectar-extra-color-3)" }}
+      className="mt-6 p-4 rounded-lg
+      bg-[var(--black-secondary-color-1)]"
     >
       <h3
-        className="font-bold mb-2"
-        style={{ color: "var(--nectar-accent-color)" }}
+        // className="font-bold mb-2"
+        // style={{ color: "var(--nectar-accent-color)" }}
       >
         AI Captured Requirements
       </h3>

@@ -1,10 +1,9 @@
 .container {
-  background-color: var(--nectar-extra-color-1-color);
-  color: var(--nectar-extra-color-2-color);
+  background-color: var(--dark-blue-primary-color-1-color);
+  color: var(--white-primary-color-1-color);
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  max-width: 900px;
   margin: 2rem auto;
 }
 
@@ -19,7 +18,7 @@
 .roles {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--nectar-extra-color-3);
+  border-bottom: 1px solid var(--black-secondary-color-1);
   text-align: center;
 }
 
@@ -30,7 +29,7 @@
 
 .toggleButton {
   background: var(--nectar-accent-color);
-  color: var(--nectar-extra-color-2);
+  color: var(--white-primary-color-1);
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;

@@ -1,9 +1,9 @@
 .entityForm {
-  background: var(--nectar-extra-color-1);
+  background: var(--bg-color-1-ui-generated);
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  color: var(--nectar-extra-color-2);
+  color: var(--text-color-1-ui-generated);
 }
 
 .formField {
@@ -21,19 +21,19 @@
 .editField {
   flex: 2;
   padding: 0.5rem;
-  border: 1px solid var(--nectar-extra-color-3);
+  border: 1px solid var(--bg-color-2-ui-generated);
   border-radius: 6px;
   background: #2a2a2a;
-  color: var(--nectar-extra-color-2);
+  color: var(--text-color-1-ui-generated);
 }
 
 .typeSelect {
   flex: 1;
   padding: 0.5rem;
-  border: 1px solid var(--nectar-extra-color-3);
+  border: 1px solid var(--bg-color-2-ui-generated);
   border-radius: 6px;
   background: #2a2a2a;
-  color: var(--nectar-extra-color-2);
+  color: var(--text-color-1-ui-generated);
 }
 
 .deleteBtn {
@@ -41,7 +41,7 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: var(--nectar-accent-color);
+  color: var(--brand-color-ui-generated);
   transition: transform 0.2s ease;
 }
 
@@ -61,13 +61,13 @@ input:disabled {
 
 input {
   padding: 0.5rem;
-  border: 1px solid var(--nectar-extra-color-3);
+  border: 1px solid var(--bg-color-2-ui-generated);
   border-radius: 4px;
 }
 
 .submitBtn {
-  background: var(--nectar-accent-color);
-  color: var(--nectar-extra-color-2);
+  background: var(--brand-color-ui-generated);
+  color: var(--text-color-1-ui-generated);
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;

@@ -1,12 +1,53 @@
 :root {
-  --nectar-accent-color: #ff6600;
-  --nectar-extra-color-1: #1d292e;
-  --nectar-extra-color-2: #ffffff;
-  --nectar-extra-color-3: #575757;
+  --nectar-accent-color: oklch(69.577% 0.20423 43.479);
+  --dark-blue-primary-color-1: oklch(27.201% 0.01896 225.473);
+  --black-secondary-color-1: oklch(45.678% 0.00005 271.152);
+  --white-primary-color-1: oklch(100% 0.00011 271.152);
+
+  --brand-color-ui-generated: oklch(69.577% 0.20423 43.479);
+  --bg-color-1-ui-generated: oklch(27.201% 0.01896 225.473);
+  --bg-color-2-ui-generated: oklch(45.678% 0.00005 271.152);
+  --text-color-1-ui-generated: oklch(100% 0.00011 271.152);
 }
 
 body {
-  background-color: var(--nectar-extra-color-1);
-  color: var(--nectar-extra-color-2);
+  background-color: var(--dark-blue-primary-color-1);
+  color: var(--white-primary-color-1);
   font-family: system-ui, sans-serif;
+}
+
+h2 {
+  color: var(--nectar-accent-color);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+h3 {
+  color: var(--nectar-accent-color);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+button {
+  background-color: var(--nectar-accent-color);
+  color: var(--white-primary-color-1);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ffaa00;
+}
+
+textarea {
+  border-color: var(--nectar-accent-color);
+  background-color: var(--black-secondary-color-1);
+  color: var(--white-primary-color-1);
+  border-radius: 0.5rem;
+  border-width: 1px;
 }

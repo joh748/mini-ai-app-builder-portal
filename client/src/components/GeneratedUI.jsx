@@ -45,7 +45,7 @@ export default function GeneratedUI({
   onUpdateRoles,
   onUpdateEntityFields,
 }) {
-  const [activeRole, setActiveRole] = useState(null);
+  const [activeRole, setActiveRole] = useState(roles[0] || null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -57,9 +57,12 @@ export default function GeneratedUI({
     })
   );
 
-  // flatMap used for dragging EntitiesForm separately
+  console.log("IN GeneratedUI.jsx, got roles props!!!!: \n", roles);
+
   const expandedUiElements = useMemo(() => {
-    return uiElements.flatMap((el) => {
+
+    // flatMap used for dragging multiple EntitiesForms individually
+    const expanded = uiElements.flatMap((el) => {
       if (el.type === "EntitiesForm") {
         return entities.map((entity) => ({
           type: "EntitiesForm",
@@ -68,7 +71,29 @@ export default function GeneratedUI({
       }
       return [el];
     });
+
+    // Sort uiElements based on ORDER list
+    return expanded.sort((a, b) => {
+      const aIndex = ORDER.indexOf(a.type);
+      const bIndex = ORDER.indexOf(b.type);
+
+      if (aIndex === -1 && bIndex === -1) {
+        // both unknown
+        return 0;
+      }
+      if (aIndex === -1) {
+        // a is unknown
+        return 1;
+      }
+      if (bIndex === -1) {
+        // b is unknown
+        return -1;
+      }
+      // both known
+      return aIndex - bIndex;
+    });
   }, [uiElements, entities]);
+
 
   const [elements, setElements] = useState(expandedUiElements);
   
@@ -133,6 +158,8 @@ export default function GeneratedUI({
                     {...el.props}
                     editable={editable}
                     {...extraProps}
+                    originalType={el.type}
+                    availableTypes={Object.keys(COMPONENT_MAP)}
                   />
                 </SortableItem>
               );

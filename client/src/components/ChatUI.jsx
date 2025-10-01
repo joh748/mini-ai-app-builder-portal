@@ -6,6 +6,7 @@ export default function ChatUI({ requirement, onUpdated }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -25,12 +26,8 @@ export default function ChatUI({ requirement, onUpdated }) {
       });
 
       const updatedRequirement = await res.json();
-
-      
-    setMessages(updatedRequirement.chatHistory || []);
-
-    onUpdated(updatedRequirement);
-
+      setMessages(updatedRequirement.chatHistory || []);
+      onUpdated(updatedRequirement);
 
     } catch (err) {
       console.error("❌ Chat error:", err);
@@ -41,25 +38,20 @@ export default function ChatUI({ requirement, onUpdated }) {
   };
 
   return (
-    <div className="w-full p-6 rounded-2xl shadow-lg"
-         style={{ backgroundColor: `var(--nectar-extra-color-1)` }}>
-      <h2 className="text-2xl font-bold mb-4"
-          style={{ color: "var(--nectar-accent-color)" }}>
+    <div className="w-full max-w-2xl max-h-screen flex flex-col p-6 m-4 rounded-2xl shadow-lg bg-[var(--dark-blue-primary-color-1)]">
+      <h2 className="text-2xl font-bold mb-4 text-[var(--nectar-accent-color)]">
         Requirement Chat
       </h2>
 
-      <div className="h-64 flex flex-col overflow-y-auto p-3 mb-4 rounded-lg"
-           style={{
-             backgroundColor: "var(--nectar-extra-color-3)",
-             color: "var(--nectar-extra-color-2)",
-           }}>
+      <div className="flex-1 overflow-y-auto p-3 mb-4 rounded-lg
+        bg-[var(--black-secondary-color-1)] text-[var(--white-primary-color-1)]">
         {messages.map((msg, idx) => (
           <div key={idx} className={`mb-2 ${msg.role === "user" ? "text-right" : "text-left"}`}>
             <span
               className={`inline-block px-3 py-2 rounded-lg ${
                 msg.role === "user"
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-black"
+                  : "bg-[var(--dark-blue-primary-color-1)] text-gray-300"
               }`}
             >
               {msg.message}
@@ -74,21 +66,15 @@ export default function ChatUI({ requirement, onUpdated }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Refine requirements..."
-          className="flex-1 p-3 rounded-lg border focus:outline-none"
-          style={{
-            borderColor: "var(--nectar-accent-color)",
-            backgroundColor: "var(--nectar-extra-color-3)",
-            color: "var(--nectar-extra-color-2)",
-          }}
+          className="flex-1 p-3 rounded-lg border focus:outline-none
+            border-[var(--nectar-accent-color)]
+            bg-[var(--black-secondary-color-1)]
+            text-[var(--white-primary-color-1)]"
         />
         <button
           type="submit"
           disabled={loading}
           className="py-2 px-4 rounded-lg font-semibold"
-          style={{
-            backgroundColor: "var(--nectar-accent-color)",
-            color: "var(--nectar-extra-color-2)",
-          }}
         >
           {loading ? "..." : "Send"}
         </button>

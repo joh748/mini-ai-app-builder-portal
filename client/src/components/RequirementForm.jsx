@@ -27,10 +27,10 @@ export default function RequirementForm({ onExtracted }) {
   };
 
   return (
-    <div className="max-w-2xl w-full p-6 rounded-2xl shadow-lg mb-6"
-         style={{ backgroundColor: `var(--nectar-extra-color-1)` }}>
-      <h2 className="text-2xl font-bold mb-4"
-          style={{ color: "var(--nectar-accent-color)" }}>
+    <div className="max-w-screen p-6 rounded-2xl shadow-lg mb-6
+        bg-[var(--dark-blue-primary-color-1)]">
+
+      <h2>
         App Requirement Extractor
       </h2>
 
@@ -39,22 +39,13 @@ export default function RequirementForm({ onExtracted }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe your app idea..."
-          className="p-3 rounded-lg border focus:outline-none"
-          style={{
-            borderColor: "var(--nectar-accent-color)",
-            backgroundColor: "var(--nectar-extra-color-3)",
-            color: "var(--nectar-extra-color-2)",
-          }}
+          className="p-3 focus:outline-none"
           rows={4}
         />
 
         <button
           type="submit"
-          className="py-2 px-4 rounded-lg font-semibold"
-          style={{
-            backgroundColor: "var(--nectar-accent-color)",
-            color: "var(--nectar-extra-color-2)",
-          }}
+          className="py-2 px-4 w-auto rounded-lg font-semibold"
         >
           {loading ? "Extracting..." : "Extract Requirements"}
         </button>

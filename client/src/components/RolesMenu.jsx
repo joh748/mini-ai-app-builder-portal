@@ -40,7 +40,7 @@ export default function RolesMenu({ roles, activeRole, onSelect, editable, onUpd
                 className={styles.deleteBtn}
                 onClick={() => removeRole(i)}
               >
-                ❌
+                ✖
               </button>
             </div>
           ))}

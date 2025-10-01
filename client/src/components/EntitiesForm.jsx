@@ -37,7 +37,7 @@ console.log("Inside EntitiesForm, got these initial fields: \n", initialFields);
 
   return (
     <div className={styles.entityForm}>
-      <h3>{entity} Form</h3>
+      <h3 className="text-[var(--brand-color-ui-generated)]">{entity} Form</h3>
 
       {fields.length > 0 ? (
         <form>

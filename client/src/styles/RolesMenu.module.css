@@ -5,8 +5,8 @@
 }
 
 .roleButton {
-  background: var(--nectar-extra-color-3);
-  color: var(--nectar-extra-color-2);
+  background: var(--bg-color-2-ui-generated);
+  color: var(--text-color-1-ui-generated);
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -14,6 +14,6 @@
 }
 
 .roleButton.active {
-  background: var(--nectar-accent-color);
+  background: var(--brand-color-ui-generated);
   font-weight: bold;
 }
