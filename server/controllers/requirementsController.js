@@ -2,12 +2,11 @@
 import Requirement from "../models/Requirement.js";
 import { GoogleGenAI, Type } from "@google/genai";
 
-/**@todo use .env file, currently process.env.GEMINI_API_KEY gives undefined */
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
-    || "AIzaSyAsKhl1OwXCte2dS-6ExyNNNht9_vRtwe4", // fallback
+    // || "AIzaSyAsKhl1OwXCte2dS-6ExyNNNht9_vRtwe4", // fallback
 });
-console.log("gemini key: ", process.env.GEMINI_API_KEY);
+// console.log("gemini key: ", process.env.GEMINI_API_KEY);
 
 export const extractRequirements = async (req, res) => {
   try {
