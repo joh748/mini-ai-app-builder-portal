@@ -134,29 +134,6 @@ Return ONLY valid JSON, no explanations.
       return res.status(500).json({ error: "AI output missing required fields", raw: parsed });
     }
 
-    /**@todo store valid ui types somewhere else so that reusable*/
-    const VALID_UI_TYPES = new Set([
-      "RolesMenu",
-      "EntitiesForm",
-      // "Sidebar",
-      // "SearchBar",
-      // "DashboardSummary",
-      // "DataTableView",
-      // "ActionButton",
-      // "HomepageImage",
-    ]);
-
-    const sanitizedUiElements = parsed.uiElements.map(el => {
-      if (!VALID_UI_TYPES.has(el.type)) {
-        console.warn(`⚠️ Unknown UI type (chat): ${el.type}, replacing with Placeholder`);
-        return {
-          type: "Placeholder",
-          props: { originalType: el.type, ...el.props },
-        };
-      }
-      return el;
-    });
-
     /**
      * Update Requirements and push chat
      */
@@ -164,7 +141,7 @@ Return ONLY valid JSON, no explanations.
     requirement.entities = entities;
     requirement.roles = roles;
     requirement.features = features;
-    requirement.uiElements = sanitizedUiElements;
+    requirement.uiElements = parsed.uiElements;
     requirement.chatHistory.push({
       role: "assistant",
       message: JSON.stringify({

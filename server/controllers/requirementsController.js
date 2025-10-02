@@ -116,35 +116,13 @@ Return ONLY valid JSON, no explanations.
       return res.status(500).json({ error: "AI output missing required fields", raw: parsed });
     }
 
-    const VALID_UI_TYPES = new Set([
-      "RolesMenu",
-      "EntitiesForm",
-      "Sidebar",
-      "SearchBar",
-      "DashboardSummary",
-      "DataTableView",
-      "ActionButton",
-      "HomepageImage",
-    ]);
-
-    const sanitizedUiElements = parsed.uiElements.map(el => {
-      if (!VALID_UI_TYPES.has(el.type)) {
-        console.warn(`⚠️ Unknown UI type: ${el.type}, replacing with Placeholder`);
-        return {
-          type: el.type,
-          props: { originalType: el.type, ...el.props }
-        };
-      }
-      return el;
-    });
-
     const newReq = new Requirement({
       description,
       appName,
       entities,
       roles,
       features,
-      uiElements: uiElements,
+      uiElements: parsed.uiElements,
     });
 
     console.log("💾 Saving requirement:", newReq);

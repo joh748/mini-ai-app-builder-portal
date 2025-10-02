@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import RolesMenu from "./RolesMenu";
 import EntitiesForm from "./EntitiesForm";
+import SearchBar from "./SearchBar";
 import Placeholder from "./Placeholder";
 import SortableItem from "./SortableItem";
 import {
@@ -23,8 +24,8 @@ import styles from "../styles/GeneratedUI.module.css";
 const COMPONENT_MAP = {
   RolesMenu,
   EntitiesForm,
+  SearchBar,
   // Sidebar,
-  // SearchBar,
   // DashboardSummary,
   // DataTableView,
   // ActionButton,
@@ -32,6 +33,7 @@ const COMPONENT_MAP = {
 };
 
 const ORDER = [
+  "SearchBar",
   "RolesMenu",
   "EntitiesForm",
 ];
