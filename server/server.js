@@ -8,13 +8,25 @@ import requirementsRoute from './routes/requirements.js';
 import chatsRoutes from "./routes/chats.js";
 import entitiesRoute from './routes/entities.js';
 
+
+const allowedOrigins = [
+  "https://mini-ai-app-builder-portal.onrender.com",
+  "http://localhost:3000"
+];
+
 const app = express();
 app.use(cors({
-  origin: "*", // for dev
-  // origin: "https://ai-app-builder-frontend.onrender.com", // for Render
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
+
 app.use(express.json());
 
 /**
