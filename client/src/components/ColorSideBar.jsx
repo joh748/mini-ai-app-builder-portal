@@ -80,7 +80,8 @@ export default function ColorSideBar() {
   };
 
   const renderSliders = (key, label) => (
-    <div className={styles.colorGroup} key={key}>
+    <div className={styles.colorGroup} key={key}
+    data-color={key}>
       <button
         className={styles.groupHeader}
         onClick={() => setOpenGroup(openGroup === key ? null : key)}

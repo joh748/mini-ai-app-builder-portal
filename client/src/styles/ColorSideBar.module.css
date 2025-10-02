@@ -51,10 +51,56 @@
 }
 
 .colorGroup {
-  border: 1px solid var(--black-secondary-color-1);
+  border: 2px solid var(--black-secondary-color-1);
   border-radius: 8px;
   overflow: hidden;
 }
+
+.colorGroup {
+  border: 3px solid var(--black-secondary-color-1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.slider {
+  border: 1px solid var(--black-secondary-color-1);
+  border-radius: 4px;
+  outline: none;
+}
+
+/* Accent group */
+.colorGroup[data-color="accent"] {
+  border-color: var(--brand-color-ui-generated);
+}
+.colorGroup[data-color="accent"] .slider {
+  border-color: var(--brand-color-ui-generated);
+}
+
+/* Background 1 */
+.colorGroup[data-color="bg1"] {
+  border-color: var(--bg-color-1-ui-generated);
+}
+.colorGroup[data-color="bg1"] .slider {
+  border-color: var(--bg-color-1-ui-generated);
+}
+
+/* Background 2 */
+.colorGroup[data-color="bg2"] {
+  border-color: var(--bg-color-2-ui-generated);
+}
+.colorGroup[data-color="bg2"] .slider {
+  border-color: var(--bg-color-2-ui-generated);
+}
+
+/* Text */
+.colorGroup[data-color="text"] {
+  border-color: var(--text-color-1-ui-generated);
+}
+.colorGroup[data-color="text"] .slider {
+  border-color: var(--text-color-1-ui-generated);
+}
+
 
 .groupHeader {
   width: 100%;
@@ -91,6 +137,7 @@
   border-radius: 4px;
   outline: none;
   margin-top: 0.25rem;
+  border: 2px solid var(--black-secondary-color-1);
 }
 
 .slider::-webkit-slider-thumb {

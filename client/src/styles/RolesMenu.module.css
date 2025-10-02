@@ -7,7 +7,7 @@
 .roleButton {
   background: var(--bg-color-2-ui-generated);
   color: var(--text-color-1-ui-generated);
-  border: none;
+  border: 1px solid var(--brand-color-ui-generated);
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 6px;

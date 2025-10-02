@@ -131,7 +131,7 @@ Return ONLY valid JSON, no explanations.
       if (!VALID_UI_TYPES.has(el.type)) {
         console.warn(`⚠️ Unknown UI type: ${el.type}, replacing with Placeholder`);
         return {
-          type: "Placeholder",
+          type: el.type,
           props: { originalType: el.type, ...el.props }
         };
       }
@@ -144,7 +144,7 @@ Return ONLY valid JSON, no explanations.
       entities,
       roles,
       features,
-      uiElements: sanitizedUiElements
+      uiElements: uiElements,
     });
 
     console.log("💾 Saving requirement:", newReq);
