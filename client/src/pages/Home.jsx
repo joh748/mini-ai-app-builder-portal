@@ -39,7 +39,7 @@ export default function Home() {
 
   console.log("Inside Home.jsx, here is the requirements: ", requirements);
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex-col w-window items-center justify-center">
+    <div className="min-h-screen bg-gray-950 text-white w-auto items-center">
 
       <div flex flex-col>
         <RequirementForm onExtracted={handleExtracted} />
@@ -67,7 +67,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="flex flex-row w-screen border border-[var(--nectar-accent-color)]">
+          <div className="flex flex-row w-full border-y border-[var(--nectar-accent-color)]">
             <GeneratedUI
               appName={requirements.appName}
               entities={requirements.entities}
