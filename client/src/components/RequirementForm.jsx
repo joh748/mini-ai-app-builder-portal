@@ -10,7 +10,7 @@ export default function RequirementForm({ onExtracted }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/requirements", {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/requirements`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description }),

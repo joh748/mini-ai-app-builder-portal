@@ -8,10 +8,13 @@ import requirementsRoute from './routes/requirements.js';
 import chatsRoutes from "./routes/chats.js";
 import entitiesRoute from './routes/entities.js';
 
-console.log("🔑 Gemini Key loaded:", process.env.GEMINI_API_KEY);
-
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*", // for dev
+  // origin: "https://ai-app-builder-frontend.onrender.com", // for Render
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 app.use(express.json());
 
 /**
